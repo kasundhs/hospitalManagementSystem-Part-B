@@ -29,12 +29,12 @@ public class Auditor implements Runnable {
                     state.incrementReportCount();
 
                     state.lockRead();
-                    LogWriter.log("Processed: " + state.getTotalProcessed() +
-                            ", Reports: " + state.getTotalReportGenerateCount());
+                    LogWriter.log("Total Processed So far: " + state.getTotalProcessed() +
+                            " and, Total Report Generates So far: " + state.getTotalReportGenerateCount());
                     state.unlockRead();
                 }
                 processedOrderQueue.releaseProcessingLock();
-                Thread.sleep(300);
+                Thread.sleep(200);
             }
 
         } catch (InterruptedException e) {
