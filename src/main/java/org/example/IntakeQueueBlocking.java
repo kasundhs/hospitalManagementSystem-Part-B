@@ -36,7 +36,8 @@ public class IntakeQueueBlocking {
             order = emergencyQueue.poll();
             isForNormalPatients = true;
         }
-        capacitySemaphore.release();
+        if(order!=null)
+            capacitySemaphore.release();
         return order;
     }
 
