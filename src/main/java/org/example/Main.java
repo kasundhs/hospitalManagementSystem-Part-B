@@ -7,6 +7,7 @@ public class Main {
         SystemStateMonitor state = new SystemStateMonitor();
         ProcessedOrderQueueMonitor processedQueue = new ProcessedOrderQueueMonitor();
 
+        System.out.println("System Started... Waiting 15 seconds before stopping...");
         Producer p1 = new Producer(queue, state, "Clinic Counter -1");
         Producer p2 = new Producer(queue, state, "Clinic Counter -2");
 
@@ -42,6 +43,6 @@ public class Main {
         a2.shutdown();
         sup.shutdown();
 
-        System.out.println("System shutdown completed.");
+        System.out.println("System shutdown completed....");
     }
 }

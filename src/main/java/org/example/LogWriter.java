@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+// For this used synchronized, because, otherwise, it would be a trouble while parallel executions.
 public class LogWriter {
 
     private static final String LOG_FILE = "diagnostics.log";
