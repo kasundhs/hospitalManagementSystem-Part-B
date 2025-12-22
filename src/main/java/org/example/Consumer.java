@@ -27,7 +27,7 @@ public class Consumer implements Runnable {
             while (running) {
                 TestOrder order = queue.consume(state.isEmergencyPriorityEnabled());
                 if (order == null) continue;
-                if (order.priority == TestOrder.Priority.EMERGENCY)
+                if (order.priority == Priority.EMERGENCY)
                     state.decrementEmergencyPatientCount();
                 LogWriter.log(name + " processing " + order);
                 Thread.sleep(200 + rnd.nextInt(250));

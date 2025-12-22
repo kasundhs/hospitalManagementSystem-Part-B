@@ -23,16 +23,16 @@ public class Producer implements Runnable {
 
         try {
             while (running) {
-                TestOrder.Priority priority = rnd.nextInt(10) < 5 ? TestOrder.Priority.EMERGENCY : TestOrder.Priority.NORMAL;
-                TestOrder.IsSpecialTest special = rnd.nextInt(10) < 2 ? TestOrder.IsSpecialTest.YES : TestOrder.IsSpecialTest.NO;
+                Priority priority = rnd.nextInt(10) < 5 ? Priority.EMERGENCY : Priority.NORMAL;
+                IsSpecialTest special = rnd.nextInt(10) < 2 ? IsSpecialTest.YES : IsSpecialTest.NO;
                 TestOrder order = new TestOrder(types[rnd.nextInt(types.length)], priority, special);
 
-                if (order.isSpecialTest == TestOrder.IsSpecialTest.YES) {
+                if (order.isSpecialTest == IsSpecialTest.YES) {
                     LogWriter.log(order + " rejected (special test unavailable)");
                     continue;
                 }
 
-                if (priority == TestOrder.Priority.EMERGENCY)
+                if (priority == Priority.EMERGENCY)
                     state.setEmergencyPatientCount();
                 queue.produce(order);
                 LogWriter.log(name + " registered " + order);

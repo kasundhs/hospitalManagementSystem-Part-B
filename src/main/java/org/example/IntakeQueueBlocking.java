@@ -16,7 +16,7 @@ public class IntakeQueueBlocking {
 
     public void produce(TestOrder order) throws InterruptedException {
         capacitySemaphore.acquire();
-        if (order.priority == TestOrder.Priority.EMERGENCY) {
+        if (order.priority == Priority.EMERGENCY) {
             emergencyQueue.put(order);
         } else {
             normalQueue.put(order);
