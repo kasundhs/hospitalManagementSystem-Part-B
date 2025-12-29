@@ -26,7 +26,7 @@ public class TestOrder {
 
     @Override
     public String toString() {
-        return "Order#" + id + " (" + type + ")";
+        return "Order#" + id + " (" + type + ") : "+priority;
     }
 }
 
