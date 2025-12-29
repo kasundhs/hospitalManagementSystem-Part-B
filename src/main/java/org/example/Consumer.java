@@ -27,15 +27,26 @@ public class Consumer implements Runnable {
             while (running) {
                 TestOrder order = queue.consume(state.isEmergencyPriorityEnabled());
                 if (order == null) continue;
-                if (order.priority == Priority.EMERGENCY)
-                    state.decrementEmergencyPatientCount();
-                LogWriter.log(name + " processing " + order);
+                try {
+                    if (order.priority == Priority.EMERGENCY)
+                        state.decrementEmergencyPatientCount();
+                    LogWriter.log(name + " processing " + order);
+                    state.incrementProcessed();
+                    processedOrderQueue.addProcessedOrder(order);
+                }
+                catch (Exception e){
+                    LogWriter.log(order.toString()+" is started to Process. But Cannot Complete due to time Exceed.");
+                    if(order.priority == Priority.EMERGENCY)
+                        state.setEmergencyPatientCount();
+                    processedOrderQueue.removeProcessedOrder();
+                    state.decrementProceed();
+                }
                 Thread.sleep(200 + rnd.nextInt(250));
-                state.incrementProcessed();
-                processedOrderQueue.addProcessedOrder(order);
             }
 
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException e) {
+            LogWriter.log(name + " interrupted unexpectedly");
+        }
     }
 
     public void start() {

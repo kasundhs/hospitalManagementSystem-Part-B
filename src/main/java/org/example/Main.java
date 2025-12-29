@@ -29,7 +29,9 @@ public class Main {
 
         try {
             Thread.sleep(15000);
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException e) {
+            System.out.println("Main thread interrupted.");
+        }
 
         p1.shutdown();
         p2.shutdown();

@@ -28,10 +28,8 @@ public class Auditor implements Runnable {
 
                     state.incrementReportCount();
 
-                    state.lockRead();
                     LogWriter.log("Total Processed So far: " + state.getTotalProcessed() +
                             " and, Total Report Generates So far: " + state.getTotalReportGenerateCount());
-                    state.unlockRead();
                 }
                 processedOrderQueue.releaseProcessingLock();
                 Thread.sleep(200);
@@ -40,7 +38,7 @@ public class Auditor implements Runnable {
         } catch (InterruptedException e) {
             // Interruption is expected during shutdown, restore interrupt status
             Thread.currentThread().interrupt();
-            LogWriter.log(name + " interrupted - shutting down");
+            LogWriter.log(name + " interrupted unexpectedly");
         } finally {
             processedOrderQueue.releaseProcessingLock();
         }

@@ -11,7 +11,7 @@ public class ReportGenrator {
     private static PrintWriter writer;
     private static final Object lock = new Object();
     private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
+    // For this one use synchronized while creating report. Otherwise, reports won't accurate
     public ReportGenrator(TestOrder order){
 
         File folder = new File("Test Report");

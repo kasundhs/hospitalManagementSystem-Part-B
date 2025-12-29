@@ -31,15 +31,24 @@ public class Producer implements Runnable {
                     LogWriter.log(order + " rejected (special test unavailable)");
                     continue;
                 }
-
-                if (priority == Priority.EMERGENCY)
-                    state.setEmergencyPatientCount();
-                queue.produce(order);
-                LogWriter.log(name + " registered " + order);
+                try {
+                    if (priority == Priority.EMERGENCY)
+                        state.setEmergencyPatientCount();
+                    queue.produce(order);
+                    LogWriter.log(name + " registered " + order);
+                }
+                catch (InterruptedException e){
+                    LogWriter.log( order.toString()+" Created. But It cannot be Completed, due to time Exceed.");
+                    if(priority == Priority.EMERGENCY){
+                        state.decrementEmergencyPatientCount();
+                    }
+                }
                 Thread.sleep(100 + rnd.nextInt(300));
             }
 
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException e) {
+            LogWriter.log(name + " interrupted unexpectedly");
+        }
     }
 
     public void start() {

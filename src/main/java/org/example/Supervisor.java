@@ -19,16 +19,9 @@ public class Supervisor implements Runnable {
     public void run() {
         try {
             while (running) {
-
-                state.lockWrite();
-
                 boolean enable = state.getEmergencyPatientCount() >= 2;
                 state.setEmergencyPriorityEnabled(enable);
-
                 LogWriter.log(name + " updated emergency prioritization to " + enable);
-
-                state.unlockWrite();
-
                 Thread.sleep(rnd.nextInt(1000));
             }
 

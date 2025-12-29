@@ -38,6 +38,15 @@ public class ProcessedOrderQueueMonitor {
             writeLock.unlock();
         }
     }
+    public void removeProcessedOrder(){ // remove in consumer interrupted
+        writeLock.lock();
+        try {
+            processedOrderQueue.poll();
+        }
+        finally {
+            writeLock.unlock();
+        }
+    }
     public void releaseProcessingLock() {
         writeLock.lock();
         try {
