@@ -13,7 +13,7 @@ public class Main {
         Consumer c1 = new Consumer(queue, state, processedQueue, "Doctor -1");
         Auditor a1 = new Auditor(state, processedQueue, "Auditor -1");
         Auditor a2 = new Auditor(state, processedQueue, "Auditor -2");
-        Auditor a3 = new Auditor(state, processedQueue, "Auditor -2");
+        Auditor a3 = new Auditor(state, processedQueue, "Auditor -3");
         Supervisor sup = new Supervisor(state, event, "Supervisor");
 
         p1.start();
@@ -31,10 +31,10 @@ public class Main {
 
         sup.shutdown();
         p1.shutdown();
-        event.reduceProducers();
+        event.shutdownAllProducers();
         queue.setExpiration();
         c1.shutdown();
-        event.reduceConsumers();
+        event.shutdownAllConsumers();
         processedQueue.setExpiration();
         a1.shutdown();
         a2.shutdown();
