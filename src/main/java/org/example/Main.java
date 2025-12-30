@@ -13,12 +13,14 @@ public class Main {
         Consumer c1 = new Consumer(queue, state, processedQueue, "Doctor -1");
         Auditor a1 = new Auditor(state, processedQueue, "Auditor -1");
         Auditor a2 = new Auditor(state, processedQueue, "Auditor -2");
+        Auditor a3 = new Auditor(state, processedQueue, "Auditor -2");
         Supervisor sup = new Supervisor(state, event, "Supervisor");
 
         p1.start();
         c1.start();
         a1.start();
         a2.start();
+        a3.start();
         sup.start();
 
         try {
@@ -36,7 +38,7 @@ public class Main {
         processedQueue.setExpiration();
         a1.shutdown();
         a2.shutdown();
-
+        a3.shutdown();
         System.out.println("System shutdown completed....");
     }
 }
