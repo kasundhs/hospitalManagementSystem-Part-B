@@ -8,10 +8,15 @@ public class IntakeQueueBlocking {
     private final BlockingQueue<TestOrder> emergencyQueue = new LinkedBlockingQueue<>();
     private final BlockingQueue<TestOrder> normalQueue = new LinkedBlockingQueue<>();
     private final Semaphore capacitySemaphore;
+    private final int capacity;
     private boolean isForNormalPatients = true;
 
     public IntakeQueueBlocking(int capacity) {
         this.capacitySemaphore = new Semaphore(capacity); // global capacity no need to manual focus
+        this.capacity = capacity;
+    }
+    public int getQueueUsage(){
+        return capacity - capacitySemaphore.availablePermits();
     }
 
     public void produce(TestOrder order) throws InterruptedException {

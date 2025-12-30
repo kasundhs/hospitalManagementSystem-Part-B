@@ -12,6 +12,8 @@ public class SystemStateMonitor {
     private int emergencyPatientCount = 0;
     private boolean emergencyPriorityEnabled = true;
     private int totalReportGenerateCount = 0;
+    private int numberOfProducerThreads = 1;
+    private int numberOfConsumerThreads = 1;
 
     // Write Locks
     public void incrementProcessed() {
@@ -101,5 +103,24 @@ public class SystemStateMonitor {
         } finally {
             readLock.unlock();
         }
+    }
+
+    public int getNumberOfProducerThreads() {
+        return numberOfProducerThreads;
+    }
+    public int getNumberOfConsumerThreads() {
+        return numberOfConsumerThreads;
+    }
+    public void setNumberOfProducerThreads() {
+        numberOfProducerThreads++;
+    }
+    public void setNumberOfConsumerThreads() {
+        numberOfConsumerThreads++;
+    }
+    public void reduceProducersCount() {
+        numberOfProducerThreads--;
+    }
+    public void reduceConsumersCount() {
+        numberOfConsumerThreads--;
     }
 }

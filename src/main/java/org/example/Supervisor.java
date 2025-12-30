@@ -5,13 +5,15 @@ import java.util.Random;
 public class Supervisor implements Runnable {
 
     private final SystemStateMonitor state;
+    private final EventScheduler event;
     private final String name;
     private Thread thread;
     private final Random rnd = new Random();
     private volatile boolean running = true;
 
-    public Supervisor(SystemStateMonitor state, String name) {
+    public Supervisor(SystemStateMonitor state, EventScheduler event, String name) {
         this.state = state;
+        this.event = event;
         this.name = name;
     }
 
@@ -19,9 +21,15 @@ public class Supervisor implements Runnable {
     public void run() {
         try {
             while (running) {
-                boolean enable = state.getEmergencyPatientCount() >= 2;
-                state.setEmergencyPriorityEnabled(enable);
-                LogWriter.log(name + " updated emergency prioritization to " + enable);
+                event.addConsumer();   // add producer if needed.
+                if(state.getEmergencyPatientCount() < 2){
+                    state.setEmergencyPriorityEnabled(false);
+                }
+                else {
+                    state.setEmergencyPriorityEnabled(true);
+                }
+                LogWriter.log(name + " updated emergency prioritization to " + state.isEmergencyPriorityEnabled());
+                event.addProducers();   // add producer if needed.
                 Thread.sleep(rnd.nextInt(1000));
             }
 

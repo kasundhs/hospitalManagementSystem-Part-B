@@ -3,26 +3,20 @@ package org.example;
 public class Main {
     public static void main(String[] args) {
 
-        IntakeQueueBlocking queue = new IntakeQueueBlocking(20);
+        IntakeQueueBlocking queue = new IntakeQueueBlocking(Constants.MAXIMUM_QUEUE_SIZE);
         SystemStateMonitor state = new SystemStateMonitor();
         ProcessedOrderQueueMonitor processedQueue = new ProcessedOrderQueueMonitor();
+        EventScheduler event = new EventScheduler(queue,state,processedQueue);
 
         System.out.println("System Started... Waiting 15 seconds before stopping...");
         Producer p1 = new Producer(queue, state, "Clinic Counter -1");
-        Producer p2 = new Producer(queue, state, "Clinic Counter -2");
-
         Consumer c1 = new Consumer(queue, state, processedQueue, "Doctor -1");
-        Consumer c2 = new Consumer(queue, state, processedQueue, "Doctor -2");
-
         Auditor a1 = new Auditor(state, processedQueue, "Auditor -1");
         Auditor a2 = new Auditor(state, processedQueue, "Auditor -2");
-
-        Supervisor sup = new Supervisor(state, "Supervisor");
+        Supervisor sup = new Supervisor(state, event, "Supervisor");
 
         p1.start();
-        p2.start();
         c1.start();
-        c2.start();
         a1.start();
         a2.start();
         sup.start();
@@ -33,17 +27,15 @@ public class Main {
             System.out.println("Main thread interrupted.");
         }
 
+        sup.shutdown();
         p1.shutdown();
-        p2.shutdown();
+        event.reduceProducers();
         queue.setExpiration();
-
         c1.shutdown();
-        c2.shutdown();
+        event.reduceConsumers();
         processedQueue.setExpiration();
-
         a1.shutdown();
         a2.shutdown();
-        sup.shutdown();
 
         System.out.println("System shutdown completed....");
     }
